@@ -47,8 +47,8 @@ for ticker in tickers:
     stock.put_dataframe(ticker,data)
     #Save all the data
     stock.save_database()
-    #Plot EMA
-    stock.calculateMACD()
+#Plot EMA
+stock.calculateMACD(12,26,9)
 #Print whole database
 stock.print_database()
 

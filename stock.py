@@ -19,9 +19,22 @@ class stock():
     #Method to store a record at database
     def put_dataframe(self,ticker,data_frame):
         self.database[ticker] = data_frame
-    def calculateMACD(self):
+    #Calculate MACD for database
+    def calculateMACD(self, fast, slow, signal):
         for key in self.database.keys():
-            print(self.database[key].ewm(14).mean())
+            #Calculating MACD slow, fast and signal for column 4. close at database
+            print('calculating MACD for '+key)
+            emaFast = self.database[key]['4. close'].ewm(span=fast).mean()
+            emaSlow = self.database[key]['4. close'].ewm(span=slow).mean()
+            #Definition of MACD
+            macd = emaFast - emaSlow
+            #Signal line calculation
+            signal = macd.ewm(span=signal).mean()
+            #Adding to the database all the elements of MACD
+            self.database[key]['5. MACDLine'] = macd
+            self.database[key]['6. MACDSignal'] = signal
+            macdHistogram = macd - signal
+            self.database[key]['7. MACDHistogram'] = macdHistogram
     #Method to store all
     def save_database(self):
         #Save in csv output
